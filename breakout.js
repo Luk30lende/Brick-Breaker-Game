@@ -59,6 +59,18 @@ const update = () => {
   ball.x += ball.velocityX;
   ball.y += ball.velocityY;
   context.fillRect(ball.x, ball.y, ball.width, ball.height);
+
+  // bounce ball off walls
+  if (ball.y <= 0) {
+    // if ball touches top of canvas
+    ball.velocityY *= -1; // reserve direction
+  } else if (ball.x <= 0 || ball.x + ball.width >= boardWidth) {
+    // if ball touches left or right of canvas
+    ball.velocityX *= -1; // reverse direction
+  } else if (ball.y + ball.height >= boardHeight) {
+    // if ball touches bottom of canvas
+    // Game Over
+  }
 };
 
 function outOfBounds(xPosition) {
