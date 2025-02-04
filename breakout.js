@@ -17,6 +17,21 @@ let player = {
   velocityX: playerVelocityX,
 };
 
+// Ball
+let ballWidth = 10;
+let ballHeight = 10;
+let ballVelocityX = 3;
+let ballVelocityY = 2;
+
+let ball = {
+  x: boardWidth / 2,
+  y: boardHeight / 2,
+  width: ballWidth,
+  height: ballHeight,
+  velocityX: ballVelocityX,
+  velocityY: ballVelocityY,
+};
+
 window.onload = () => {
   board = document.getElementById("board");
   board.height = boardHeight;
@@ -35,9 +50,15 @@ const update = () => {
   requestAnimationFrame(update);
   context.clearRect(0, 0, board.width, board.height); // clear the frame before we draw something new in the canvas
 
-  //Player/Paddle
+  // player or paddle
   context.fillStyle = "lightgreen";
   context.fillRect(player.x, player.y, player.width, player.height);
+
+  // ball
+  context.fillStyle = "whitesmoke";
+  ball.x += ball.velocityX;
+  ball.y += ball.velocityY;
+  context.fillRect(ball.x, ball.y, ball.width, ball.height);
 };
 
 function outOfBounds(xPosition) {
