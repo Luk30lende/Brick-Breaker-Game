@@ -18,12 +18,12 @@ let player = {
 };
 
 window.onload = () => {
-  document.getElementById("board");
-  board.width = boardWidth;
+  board = document.getElementById("board");
   board.height = boardHeight;
-  context = getContext("2d"); // Used for drawing on the board
+  board.width = boardWidth;
+  context = board.getContext("2d"); // Used for drawing on the board
 
-  // Draw the player
+  // Draw the player/paddle
   context.fillStyle = "lightgreen";
   context.fillRect(player.x, player.y, player.width, player.height);
 
