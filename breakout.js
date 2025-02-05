@@ -4,7 +4,7 @@ let boardWidth = 500;
 let boardHeight = 500;
 let context;
 
-// Player/Paddle
+// Player paddle
 let playerWidth = 80;
 let playerHeight = 10;
 playerVelocityX = 10;
@@ -38,7 +38,7 @@ window.onload = () => {
   board.width = boardWidth;
   context = board.getContext("2d"); // Used for drawing on the board
 
-  // Draw the player/paddle
+  // Draw the player paddle
   context.fillStyle = "lightgreen";
   context.fillRect(player.x, player.y, player.width, player.height);
 
@@ -50,7 +50,7 @@ const update = () => {
   requestAnimationFrame(update);
   context.clearRect(0, 0, board.width, board.height); // clear the frame before we draw something new in the canvas
 
-  // player or paddle
+  // player paddle
   context.fillStyle = "lightgreen";
   context.fillRect(player.x, player.y, player.width, player.height);
 
@@ -70,6 +70,13 @@ const update = () => {
   } else if (ball.y + ball.height >= boardHeight) {
     // if ball touches bottom of canvas
     // Game Over
+  }
+
+  // Bounce ball off the player paddle
+  if (topCollision(ball, player) || bottomCollision(ball, player)) {
+    ball.velocityY *= -1; // flip y direction up or down
+  } else if (leftCollision(ball, player) || rightCollision(ball, player)) {
+    ball.velocityX *= -1; // flip y direction left or right
   }
 };
 
@@ -91,4 +98,34 @@ const movePlayer = (e) => {
       player.x = nextPlayerX;
     }
   }
+};
+
+// Function to detect collisions
+const detectCollision = (a, b) => {
+  return (
+    a.x < b.x + b.width && // a's top left corner doesn't reach b's top right corner
+    a.x + a.width > b.x && // a's top right corner passes b's top left corner
+    a.y < b.y + b.height && // a's top left corner doesn't reach b's bottom left corner
+    a.y + a.height > b.y // a's bottom left corner passes b's top right corner
+  );
+};
+
+const topCollision = (ball, block) => {
+  // a is above b (ball is above block)
+  return detectCollision(ball, block) && ball.y + ball.height >= block.y;
+};
+
+const bottomCollision = (ball, block) => {
+  // a is below b (ball is below block)
+  return detectCollision(ball, block) && block.y + block.height >= ball.y;
+};
+
+const leftCollision = (ball, block) => {
+  // a is left of b (ball is left of block)
+  return detectCollision(ball, block) && ball.x + ball.width >= block.x;
+};
+
+const rightCollision = (ball, block) => {
+  // a is right of b (ball is right of block)
+  return detectCollision(ball, block) && block.x + block.width >= ball.x;
 };
