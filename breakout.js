@@ -100,6 +100,15 @@ const update = () => {
   for (let i = 0; i < blockArray.length; i++) {
     let block = blockArray[i];
     if (!block.break) {
+      if (topCollision(ball, block) || bottomCollision(ball, block)) {
+        block.break = true;
+        ball.velocityY *= -1; // flip y direction up or down
+        blockCount -= -1;
+      } else if (leftCollision(ball, block) || rightCollision(ball, block)) {
+        block.break = true;
+        ball.velocityX *= -1; // flip y direction left or right
+        blockCount -= -1;
+      }
       context.fillRect(block.x, block.y, block.width, block.height);
     }
   }
@@ -160,8 +169,8 @@ const createBlocks = () => {
   for (let c = 0; c < blockColumns; c++) {
     for (let r = 0; r < blockRows; r++) {
       let block = {
-        x: blockX + c * blockWidth + c * 10,
-        y: blockY + r * blockHeight,
+        x: blockX + c * blockWidth + c * 10, // c * 10  -> space 10px apart columns
+        y: blockY + r * blockHeight + r * 10, // r * 10  -> space 10px apart rows
         width: blockWidth,
         height: blockHeight,
         break: false,
