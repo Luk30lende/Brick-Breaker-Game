@@ -7,7 +7,7 @@ let context;
 // Player paddle
 let playerWidth = 80;
 let playerHeight = 10;
-playerVelocityX = 10;
+let playerVelocityX = 10; // move player paddle 10px each time
 
 let player = {
   x: boardWidth / 2 - playerWidth / 2,
@@ -44,6 +44,9 @@ let blockCount = 0;
 // Starting block corner
 let blockX = 15;
 let blockY = 45;
+
+// Score
+let score = 0;
 
 window.onload = () => {
   board = document.getElementById("board");
@@ -104,20 +107,27 @@ const update = () => {
         block.break = true;
         ball.velocityY *= -1; // flip y direction up or down
         blockCount -= -1;
+        score += 10;
       } else if (leftCollision(ball, block) || rightCollision(ball, block)) {
         block.break = true;
         ball.velocityX *= -1; // flip y direction left or right
         blockCount -= -1;
+        score += 10;
       }
       context.fillRect(block.x, block.y, block.width, block.height);
     }
   }
+
+  // Draw score on to the canvas
+  context.font = "25px sans-serif";
+  context.fillText(score, 10, 25);
 };
 
 function outOfBounds(xPosition) {
   return xPosition < 0 || xPosition + playerWidth > boardWidth;
 }
 
+// move player paddle
 const movePlayer = (e) => {
   if (e.code == "ArrowLeft") {
     // player.x -= player.velocityX;
