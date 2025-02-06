@@ -48,6 +48,9 @@ let blockY = 45;
 // Score
 let score = 0;
 
+// Game over
+let gameOver = false;
+
 window.onload = () => {
   board = document.getElementById("board");
   board.height = boardHeight;
@@ -67,6 +70,9 @@ window.onload = () => {
 
 const update = () => {
   requestAnimationFrame(update);
+  if (gameOver) {
+    return;
+  }
   context.clearRect(0, 0, board.width, board.height); // clear the frame before we draw something new in the canvas
 
   // player paddle
@@ -89,6 +95,9 @@ const update = () => {
   } else if (ball.y + ball.height >= boardHeight) {
     // if ball touches bottom of canvas
     // Game Over
+    context.font = "25px sans-serif";
+    context.fillText("Game Over: Press 'Space' To Restart", 40, 400);
+    gameOver = true;
   }
 
   // Bounce ball off the player paddle
@@ -129,6 +138,12 @@ function outOfBounds(xPosition) {
 
 // move player paddle
 const movePlayer = (e) => {
+  if (gameOver) {
+    if (e.code == "Space") {
+      resetGame();
+    }
+  }
+
   if (e.code == "ArrowLeft") {
     // player.x -= player.velocityX;
     let nextPlayerX = player.x - player.velocityX;
@@ -189,4 +204,26 @@ const createBlocks = () => {
     }
   }
   blockCount = blockArray.length;
+};
+
+const resetGame = () => {
+  gameOver = false;
+  player = {
+    x: boardWidth / 2 - playerWidth / 2,
+    y: boardHeight - playerHeight - 5,
+    width: playerWidth,
+    height: playerHeight,
+    velocityX: playerVelocityX,
+  };
+  ball = {
+    x: boardWidth / 2,
+    y: boardHeight / 2,
+    width: ballWidth,
+    height: ballHeight,
+    velocityX: ballVelocityX,
+    velocityY: ballVelocityY,
+  };
+  blockArray = [];
+  score = 0;
+  createBlocks();
 };
